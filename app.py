@@ -1,7 +1,6 @@
-from pathlib import Path
+
 import cufflinks as cf
 import pandas as pd
-import yfinance as yf
 from faicons import icon_svg
 from shiny import reactive
 from shiny.express import input, render, ui
