@@ -53,7 +53,7 @@ Ensure you have the following installed on your system:
    ```
 2. Navigate to your directory:
    ```bash
-   cd final_ms_ai_pai/<YourRollNumber>
+   cd final_ms_ai_pai
    ```
 3. Install required dependencies (if any):
    ```bash
