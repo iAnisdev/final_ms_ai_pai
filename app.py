@@ -128,7 +128,7 @@ with ui.layout_columns(col_widths=[9, 3]):
 
 @reactive.calc
 def get_ticker():
-    return yf.Ticker(input.ticker())
+    return input.ticker()
 
 
 @reactive.calc
@@ -147,9 +147,8 @@ async def get_data():
 
 @reactive.calc
 async def get_end_price():
-    date = input.dates()[1]
     ticker = input.ticker().lower()
-    query = f"SELECT * FROM {ticker} WHERE timestamp = '{date}'"
+    query = f"SELECT * FROM {ticker} ORDER BY timestamp DESC LIMIT 1"
 
     async with db_pool.acquire() as connection:
         result = await connection.fetch(query)
