@@ -67,7 +67,7 @@ Ensure you have the following installed on your system:
 6. Create a database named `crypto_analysis` in postgresql and update the database credentials in `.env` file.
 7. Run the following command to run shiny app locally:
    ```bash
-   shiny run
+   shiny run --reload --launch-browser
    ```
    Project will be running on ` http://127.0.0.1:8000/`
 
