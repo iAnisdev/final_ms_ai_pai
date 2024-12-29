@@ -2,6 +2,7 @@
 import cufflinks as cf
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.express as px
 import seaborn as sns
 from faicons import icon_svg
 from shiny import reactive
@@ -54,8 +55,6 @@ with ui.sidebar():
         "Predict Price",
         {1: "1 Day", 3: "3 Days", 7: "1 Week", 30: "1 Month"},
     )
-    # dark mode switch
-    ui.input_dark_mode()
 
 
 with ui.layout_column_wrap(fill=False):
@@ -160,6 +159,29 @@ with ui.layout_columns(col_widths=[9, 3]):
             plt.legend()
             plt.grid(True)
 
+with ui.layout_columns(col_widths=[12]):
+    with ui.card(full_screen=True):
+            ui.card_header("Volume history")
+            @render_plotly
+            async def render_volume():
+                data = await get_data()
+                # Convert result to pandas DataFrame and with only the volume and timestamp columns
+                data = pd.DataFrame([dict(row) for row in data])
+                data = data[["volume", "timestamp"]]
+                fig = px.line(
+                    data,
+                    x="timestamp",
+                    y="volume",
+                    title=f"Volume of {input.ticker()} over time",
+                    labels={"timestamp": "Timestamp", "volume": "Volume"},
+                )
+
+                fig.update_layout(
+                    xaxis_title="Timestamp",
+                    yaxis_title="Volume"
+                )
+
+                return fig
 
 @reactive.calc
 def get_ticker():
