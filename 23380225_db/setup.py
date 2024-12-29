@@ -10,7 +10,7 @@ DB_CONFIG = {
     "port": 5432,
 }
 
-# Function to connect to the database
+# Function to connect to the database.
 async def connect_to_db():
     return await asyncpg.connect(**DB_CONFIG)
 
