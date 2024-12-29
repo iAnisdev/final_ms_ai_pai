@@ -16,7 +16,6 @@ VALUES
 ('2024-12-27 11:00:00', 305.00, 315.00, 300.00, 310.00, 55.1, 110)
 ON CONFLICT (timestamp) DO NOTHING;
 
-
 INSERT INTO solana (timestamp, open, high, low, close, volume, number_of_trades)
 VALUES
 ('2024-12-27 10:00:00', 20.00, 21.00, 19.50, 20.50, 15.6, 50),
