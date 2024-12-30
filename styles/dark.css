@@ -2,3 +2,8 @@
 thead {
     color: #000 !important;
 }
+.bslib-sidebar-layout>.sidebar>.sidebar-content{
+padding: 10px;!important;}
+
+.bslib-value-box .value-box-area {padding: 10px;!important;}
+
