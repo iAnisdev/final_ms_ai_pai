@@ -69,6 +69,10 @@ Ensure you have the following installed on your system:
    ```bash
    shiny run --reload --launch-browser
    ```
+   or 
+   ```bash
+   make run
+   ```
    Project will be running on ` http://127.0.0.1:8000/`
 
 ## Contribution Guidelines
