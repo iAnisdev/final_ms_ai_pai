@@ -106,7 +106,6 @@ with ui.layout_columns(col_widths=[9, 3]):
                 legend="top",
             )
             qf.add_sma()
-            qf.add_volume(up_color="#44bb70", down_color="#040548")
             fig = qf.figure()
             fig.update_layout(
                 hovermode="x unified",
