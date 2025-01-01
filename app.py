@@ -50,12 +50,6 @@ with ui.sidebar():
         selected="Bitcoin",
     )
     ui.input_date_range("dates", "Select dates", start=start, end=end, min=min, max=max)
-    ui.input_radio_buttons(  
-        "predict",
-        "Predict Price",
-        {1: "1 Day", 3: "3 Days", 7: "1 Week", 30: "1 Month"},
-    )
-
 
 with ui.layout_column_wrap(fill=False):
     with ui.value_box(showcase=icon_svg("dollar-sign")):
@@ -87,7 +81,7 @@ with ui.layout_column_wrap(fill=False):
             return f"{change:.6f}%" if change else "N/A"
 
 
-with ui.layout_columns(col_widths=[9, 3] ,min_height="60vh"):
+with ui.layout_columns(col_widths=[9, 3] ,min_height="40vh"):
     with ui.card(full_screen=True):
         ui.card_header("Price history")
 
@@ -134,29 +128,6 @@ with ui.layout_columns(col_widths=[9, 3] ,min_height="60vh"):
                 ]
             )
             return x
-        
-        @render.plot
-        def hist():
-            df = pd.DataFrame(data=[
-                {"date": "2024-12-29", "predicted_value": 30000},
-                {"date": "2024-12-30", "predicted_value": 30500},
-                {"date": "2024-12-31", "predicted_value": 31000},
-                {"date": "2025-01-01", "predicted_value": 32000},
-                {"date": "2025-01-02", "predicted_value": 31500},
-                {"date": "2025-01-03", "predicted_value": 33000},
-                {"date": "2025-01-04", "predicted_value": 34000},
-            ], columns=["date", "predicted_value"])
-
-            plt.figure(figsize=(10, 6))
-            sns.lineplot(data=df, x="date", y="predicted_value", marker="o", label="Predicted BTC Value")
-
-            value = input.predict()
-            plt.title(f"Predicted Value for Next {value} Days")
-            plt.xlabel("Date")
-            plt.ylabel("Predicted Value")
-            plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
-            plt.legend()
-            plt.grid(True)
 
 with ui.layout_columns(col_widths=[12], min_height="60vh" ):
     with ui.card(full_screen=True):
