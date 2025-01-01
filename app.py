@@ -87,7 +87,7 @@ with ui.layout_column_wrap(fill=False):
             return f"{change:.6f}%" if change else "N/A"
 
 
-with ui.layout_columns(col_widths=[9, 3]):
+with ui.layout_columns(col_widths=[9, 3] ,min_height="60vh"):
     with ui.card(full_screen=True):
         ui.card_header("Price history")
 
@@ -158,7 +158,7 @@ with ui.layout_columns(col_widths=[9, 3]):
             plt.legend()
             plt.grid(True)
 
-with ui.layout_columns(col_widths=[12]):
+with ui.layout_columns(col_widths=[12], min_height="60vh" ):
     with ui.card(full_screen=True):
             ui.card_header("Volume history")
             @render_plotly
@@ -177,7 +177,8 @@ with ui.layout_columns(col_widths=[12]):
 
                 fig.update_layout(
                     xaxis_title="Timestamp",
-                    yaxis_title="Volume"
+                    yaxis_title="Volume",
+                    height=500,
                 )
 
                 return fig
