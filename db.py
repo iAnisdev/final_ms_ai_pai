@@ -1,6 +1,7 @@
 import asyncpg
 import os
 from dotenv import load_dotenv
+from urllib.parse import urlparse
 from shared.process_data import process_data
 
 load_dotenv()
@@ -14,13 +15,17 @@ async def get_connection():
     """
     global db_pool
     if not db_pool:
+        db_url = os.getenv("DATABASE_URL")
+        parsed_url = urlparse(db_url)
+
         db_pool = await asyncpg.create_pool(
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            database=os.getenv("DB_NAME"),
-            host=os.getenv("DB_HOST"),
-            port=os.getenv("DB_PORT"),
+            user=parsed_url.username,
+            password=parsed_url.password,
+            database=parsed_url.path.lstrip("/"),
+            host=parsed_url.hostname,
+            port=parsed_url.port,
         )
+    
     return db_pool
 
 async def initialize_data():
