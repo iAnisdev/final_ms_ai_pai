@@ -1,11 +1,10 @@
 import pandas as pd
-from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import MinMaxScaler
-
 
 class CryptoPredictor:
     def __init__(self):
-        self.model = LinearRegression()
+        self.model = RandomForestRegressor(n_estimators=100, random_state=42)
         self.scaler = MinMaxScaler()
         self.feature_columns = [
             "open",
@@ -91,7 +90,12 @@ class CryptoPredictor:
             next_features["high"] = max(next_features["open"], next_features["close"])
             next_features["low"] = min(next_features["open"], next_features["close"])
 
-            last_features = pd.DataFrame([next_features], columns=self.feature_columns)
+            next_features_df = pd.DataFrame(
+                [next_features], columns=self.feature_columns, index=last_features.index
+            )
+
+            # Update for next iteration
+            last_features = next_features_df
 
         results = [
             {
@@ -121,6 +125,6 @@ def get_prediction(data, duration):
     expected_change_percent = (expected_change / prepared_data[-1][3]) * 100
     return {
         "expected_price": predicted[-1]["value"],
-        "expected_change": expected_change_percent.round(2),
+        "expected_change": round(expected_change_percent, 2),
         "predicted": predicted,
     }
