@@ -10,10 +10,10 @@ from shiny.express import input, render, ui
 from shiny.ui import output_ui
 from shinywidgets import render_plotly
 from db import get_connection
+from shared.predict import get_prediction
 
 # Initialize the database pool asynchronously
 db_pool = None
-
 
 async def initialize_db():
     global db_pool
@@ -80,6 +80,29 @@ with ui.layout_column_wrap(fill=False):
             change = resp.get("change")
             return f"{change:.6f}%" if change else "N/A"
 
+
+with ui.layout_columns(col_widths=[12], min_height="40vh"):
+    with ui.card(full_screen=True):
+        ui.card_header("Predicted Price")
+        
+        @render_plotly
+        async def predicted_price():
+            data = await get_data()
+            predict = get_prediction(data, 30)
+            predicted_data =predict.get("predicted")
+            df = pd.DataFrame(predicted_data)
+            fig = px.line(
+                df,
+                x="timestamp",
+                y="value",
+                title=f"Predicted price of {input.ticker()} over time",
+                labels={"timestamp": "Timestamp", "value": "Price"},
+            )
+            fig.update_layout(
+                xaxis_title="Timestamp",
+                yaxis_title="Price"
+            )
+            return fig
 
 with ui.layout_columns(col_widths=[9, 3] ,min_height="40vh"):
     with ui.card(full_screen=True):
@@ -182,17 +205,17 @@ async def get_end_price():
         result = await connection.fetch(query)
         return result[0]
 
-
 @reactive.calc
 async def get_predicted_price():
-    data = await get_end_price()
+    data = await get_data()
+    predict = get_prediction(data , 30)
     return {
-        "price": data.get("close") + 10,
-        "change": 0.00001,
-        "best_day": "2021-10-10",
+        "price": predict.get("expected_price"),
+        "change": predict.get("expected_change"),
+        "predicted": predict.get("predicted"),
     }
-with ui.hold():
 
+with ui.hold():
     @render.ui
     async def change_icon():
         resp = await get_predicted_price()
