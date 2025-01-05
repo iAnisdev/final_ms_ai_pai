@@ -152,7 +152,7 @@ with ui.layout_columns(col_widths=[9, 3] ,min_height="40vh"):
             )
             return x
 
-with ui.layout_columns(col_widths=[12], min_height="60vh" ):
+with ui.layout_columns(col_widths=[12], min_height="50vh" ):
     with ui.card(full_screen=True):
             ui.card_header("Volume history")
             @render_plotly
