@@ -16,16 +16,26 @@ async def get_connection():
     global db_pool
     if not db_pool:
         db_url = os.getenv("DATABASE_URL")
+        db_url = os.getenv("DATABASE_URL")
+        if not db_url:
+            raise ValueError("DATABASE_URL is not set. Check your .env file.")
+        print(f"Database URL: {db_url}")
         parsed_url = urlparse(db_url)
+        print(f"Parsed URL: user={parsed_url.username}, database={parsed_url.path.lstrip('/')}, host={parsed_url.hostname}, port={parsed_url.port}")
+        try:
+            db_pool = await asyncpg.create_pool(
+                user=parsed_url.username,
+                password=parsed_url.password,
+                database=parsed_url.path.lstrip("/"),
+                host=parsed_url.hostname,
+                port=parsed_url.port,
+                ssl=False
+            )
+            print("Connection pool created successfully.")
+        except Exception as e:
+            print(f"Error creating connection pool: {e}")
+            raise
 
-        db_pool = await asyncpg.create_pool(
-            user=parsed_url.username,
-            password=parsed_url.password,
-            database=parsed_url.path.lstrip("/"),
-            host=parsed_url.hostname,
-            port=parsed_url.port,
-        )
-    
     return db_pool
 
 async def initialize_data():
